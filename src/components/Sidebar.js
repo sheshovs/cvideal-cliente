@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../redux/actionsRedux/user";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../assets/css/sidebar.css";
 
 //Icons
@@ -14,6 +17,16 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 const Sidebar = () => {
 	const [isOpen, setIsOpen] = useState(true);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const location = useLocation();
+	const Logout = () => {
+		dispatch(logout()).then((x) => {
+			if (x.status) {
+				return navigate("/login");
+			}
+		});
+	};
 	return (
 		<div className={isOpen ? "sidebar" : "sidebar closed"}>
 			<ul>
@@ -23,47 +36,35 @@ const Sidebar = () => {
 						Menú
 					</ItemLink>
 				</li>
-				<li
-					className={window.location.pathname === "/dashboard" ? "active" : ""}
-				>
+				<li className={location.pathname === "/dashboard" ? "active" : ""}>
 					<CustomLink to="/dashboard">
 						<DashboardIcon style={{ marginRight: 15 }} /> Principal
 					</CustomLink>
 				</li>
-				<li
-					className={window.location.pathname === "/projects" ? "active" : ""}
-				>
+				<li className={location.pathname === "/projects" ? "active" : ""}>
 					<CustomLink to="/projects">
 						<FolderIcon style={{ marginRight: 15 }} />
 						Proyectos
 					</CustomLink>
 				</li>
-				<li
-					className={
-						window.location.pathname === "/experiences" ? "active" : ""
-					}
-				>
+				<li className={location.pathname === "/experiences" ? "active" : ""}>
 					<CustomLink to="/experiences">
 						<BusinessCenterIcon style={{ marginRight: 15 }} />
 						Experiencias
 					</CustomLink>
 				</li>
-				<li
-					className={
-						window.location.pathname === "/certificates" ? "active" : ""
-					}
-				>
+				<li className={location.pathname === "/certificates" ? "active" : ""}>
 					<CustomLink to="/certificates">
 						<InventoryIcon style={{ marginRight: 15 }} />
 						Certificados
 					</CustomLink>
 				</li>
-				<li className={window.location.pathname === "/cv" ? "active" : ""}>
+				<li className={location.pathname === "/cv" ? "active" : ""}>
 					<CustomLink to="/cv">
 						<DescriptionIcon style={{ marginRight: 15 }} /> CV's
 					</CustomLink>
 				</li>
-				<li>
+				<li onClick={() => Logout()}>
 					<ItemLink>
 						<LogoutIcon style={{ marginRight: 15 }} /> Salir
 					</ItemLink>
