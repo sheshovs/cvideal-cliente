@@ -23,7 +23,7 @@ const Background = styled("div")(() => ({
 	display: "flex",
 	margin: "30px 0",
 	background:
-		"linear-gradient(to right bottom, rgba(255,255,255,0.8),rgba(255,255,255,0.6) )",
+		"linear-gradient(to right bottom, rgba(65, 185, 214,0.5),rgba(65, 185, 214,0.2), rgba(65, 185, 214,0.4))",
 	borderRadius: "30px",
 	backdropFilter: "blur(10px)",
 	boxShadow: "10px 10px 15px 0 rgba(0,0,0,0.2)",

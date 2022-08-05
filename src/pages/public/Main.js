@@ -1,14 +1,58 @@
-import React from "react";
-import { styled } from "@mui/material/styles";
+import React, { useState } from "react";
+import { styled, Box, Snackbar, Alert, Slide } from "@mui/material";
+import Navbar from "../../components/Navbar";
+import LoginSidebar from "../../components/LoginSidebar";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 const Main = () => {
-	return <Contenedor>Main</Contenedor>;
+	const [openAlert, setOpenAlert] = React.useState(false);
+	const [alertData, setAlertData] = useState({
+		message: "",
+		type: "",
+	});
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+
+		setOpenAlert(false);
+	};
+	return (
+		<>
+			<Snackbar
+				open={openAlert}
+				autoHideDuration={5000}
+				onClose={handleClose}
+				anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+				TransitionComponent={(props) => <Slide {...props} direction="left" />}
+			>
+				<Alert
+					onClose={handleClose}
+					severity={alertData.type}
+					variant="filled"
+					sx={{ width: "100%" }}
+				>
+					{alertData.message}
+				</Alert>
+			</Snackbar>
+			<LoginSidebar
+				alertData={alertData}
+				setAlertData={setAlertData}
+				setOpenAlert={setOpenAlert}
+			/>
+			<Contenedor>
+				<Navbar />
+				<Header />
+				<Footer />
+			</Contenedor>
+		</>
+	);
 };
 
 export default Main;
 
-const Contenedor = styled("div")(() => ({
+const Contenedor = styled(Box)(() => ({
 	width: "100%",
-	height: "100px",
-	backgroundColor: "blue",
+	minHeight: "100vh",
 }));

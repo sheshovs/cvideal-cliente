@@ -11,6 +11,7 @@ import {
 } from "./cvReducer";
 import { experienceReducer } from "./experienceReducer";
 import { languageReducer } from "./languageReducer";
+import { loginReducer } from "./loginReducer";
 import { projectReducer } from "./projectReducer";
 import { skillReducer } from "./skillReducer";
 import { studyReducer } from "./studyReducer";
@@ -33,4 +34,5 @@ export const rootReducer = combineReducers({
 	useCvLanguage: cvLanguageReducer,
 	useCvExperience: cvExperienceReducer,
 	useCvCertificate: cvCertificateReducer,
+	useLoginSidebar: loginReducer,
 });

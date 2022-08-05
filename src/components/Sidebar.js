@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../redux/actionsRedux/user";
+import { logout, setIsOpen } from "../redux/actionsRedux/user";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../assets/css/sidebar.css";
 
@@ -16,7 +16,7 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 const Sidebar = () => {
-	const [isOpen, setIsOpen] = useState(true);
+	const { isOpen } = useSelector((x) => x.useUser);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -29,42 +29,73 @@ const Sidebar = () => {
 	};
 	return (
 		<div className={isOpen ? "sidebar" : "sidebar closed"}>
-			<ul>
-				<li onClick={() => setIsOpen(!isOpen)}>
+			<ul className="sidebar-menu">
+				<li
+					onClick={() => dispatch(setIsOpen(!isOpen))}
+					className="sidebar-item"
+				>
 					<ItemLink>
 						<MenuIcon style={{ marginRight: 15 }} />
 						Menú
 					</ItemLink>
 				</li>
-				<li className={location.pathname === "/dashboard" ? "active" : ""}>
+				<li
+					className={
+						location.pathname === "/dashboard"
+							? "active sidebar-item"
+							: "sidebar-item"
+					}
+				>
 					<CustomLink to="/dashboard">
 						<DashboardIcon style={{ marginRight: 15 }} /> Principal
 					</CustomLink>
 				</li>
-				<li className={location.pathname === "/projects" ? "active" : ""}>
+				<li
+					className={
+						location.pathname === "/projects"
+							? "active sidebar-item"
+							: "sidebar-item"
+					}
+				>
 					<CustomLink to="/projects">
 						<FolderIcon style={{ marginRight: 15 }} />
 						Proyectos
 					</CustomLink>
 				</li>
-				<li className={location.pathname === "/experiences" ? "active" : ""}>
+				<li
+					className={
+						location.pathname === "/experiences"
+							? "active sidebar-item"
+							: "sidebar-item"
+					}
+				>
 					<CustomLink to="/experiences">
 						<BusinessCenterIcon style={{ marginRight: 15 }} />
 						Experiencias
 					</CustomLink>
 				</li>
-				<li className={location.pathname === "/certificates" ? "active" : ""}>
+				<li
+					className={
+						location.pathname === "/certificates"
+							? "active sidebar-item"
+							: "sidebar-item"
+					}
+				>
 					<CustomLink to="/certificates">
 						<InventoryIcon style={{ marginRight: 15 }} />
 						Certificados
 					</CustomLink>
 				</li>
-				<li className={location.pathname === "/cv" ? "active" : ""}>
+				<li
+					className={
+						location.pathname === "/cv" ? "active sidebar-item" : "sidebar-item"
+					}
+				>
 					<CustomLink to="/cv">
 						<DescriptionIcon style={{ marginRight: 15 }} /> CV's
 					</CustomLink>
 				</li>
-				<li onClick={() => Logout()}>
+				<li onClick={() => Logout()} className="sidebar-item">
 					<ItemLink>
 						<LogoutIcon style={{ marginRight: 15 }} /> Salir
 					</ItemLink>

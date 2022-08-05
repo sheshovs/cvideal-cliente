@@ -1,24 +1,33 @@
 import React, { useState, useEffect } from "react";
-import CloseIcon from "@mui/icons-material/Close";
 import { useSelector, useDispatch } from "react-redux";
-import { login } from "../redux/actionsRedux/user";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
 	TextField,
 	Box,
 	Button,
 	styled,
-	FormControlLabel,
-	Checkbox,
+	CircularProgress,
+	IconButton,
+	InputAdornment,
 } from "@mui/material";
 
-const LoginSidebar = ({ isOpen, setIsOpen }) => {
+//actions
+import { setIsOpen } from "../redux/actionsRedux/loginSidebar";
+import { login } from "../redux/actionsRedux/user";
+
+// icons
+import { Visibility, VisibilityOff, Close } from "@mui/icons-material";
+
+const LoginSidebar = ({ alertData, setAlertData, setOpenAlert }) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const { isOpen } = useSelector((x) => x.useLoginSidebar);
+	const [loading, setLoading] = useState(false);
 	const [userData, setUserData] = useState({
 		email: "",
 		password: "",
 	});
+	const [showPassword, setShowPassword] = useState(false);
 
 	const { email, password } = userData;
 
@@ -31,37 +40,85 @@ const LoginSidebar = ({ isOpen, setIsOpen }) => {
 		});
 	};
 
+	const handleClickShowPassword = () => {
+		setShowPassword(!showPassword);
+	};
+
+	const handleMouseDownPassword = (event) => {
+		event.preventDefault();
+		setShowPassword(!showPassword);
+	};
+
 	const onSubmit = (e) => {
 		e.preventDefault();
 
+		setLoading(!loading);
+
+		if (email.length === 0) {
+			setAlertData({
+				...alertData,
+				type: "error",
+				message: "Campo email no puede estar vacío",
+			});
+			setLoading(false);
+			setOpenAlert(true);
+			return;
+		} else if (password.length === 0) {
+			setAlertData({
+				...alertData,
+				type: "error",
+				message: "Campo contraseña no puede estar vacío",
+			});
+			setLoading(false);
+			setOpenAlert(true);
+			return;
+		}
+
 		dispatch(login(userData)).then((x) => {
 			if (x.status) {
+				setAlertData({
+					...alertData,
+					type: "success",
+					message: x.message,
+				});
+				setOpenAlert(true);
+				setLoading(false);
+				dispatch(setIsOpen(!isOpen));
 				return navigate("/dashboard");
+			} else {
+				setAlertData({
+					...alertData,
+					type: "error",
+					message: x.message,
+				});
+				setLoading(false);
+				setOpenAlert(true);
 			}
 		});
+
+		setLoading(false);
 	};
 
 	return (
 		<>
 			<MainContent isOpen={isOpen}>
 				<CloseButton>
-					<CloseIcon
-						onClick={() => setIsOpen(!isOpen)}
+					<Close
+						onClick={() => dispatch(setIsOpen(!isOpen))}
 						color="disabled"
 						sx={{
 							cursor: "pointer",
 						}}
 					/>
 				</CloseButton>
-				<FormBox>
+				<FormBox onSubmit={(e) => onSubmit(e)}>
 					<LoginTitle>Iniciar sesión</LoginTitle>
 					<Input
 						label="Correo electrónico"
-						placeholder="sergio@cvideal.cl"
+						placeholder="juan@cvideal.cl"
 						variant="outlined"
-						size="small"
 						name="email"
-						valiue={email}
+						value={email}
 						onChange={(e) => handleChange(e)}
 					/>
 
@@ -69,21 +126,47 @@ const LoginSidebar = ({ isOpen, setIsOpen }) => {
 						label="Contraseña"
 						placeholder="********"
 						variant="outlined"
-						size="small"
-						type="password"
+						type={showPassword ? "text" : "password"}
 						name="password"
-						valiue={password}
+						value={password}
 						onChange={(e) => handleChange(e)}
+						InputProps={{
+							endAdornment: (
+								<InputAdornment position="end">
+									<IconButton
+										aria-label="toggle password visibility"
+										onClick={handleClickShowPassword}
+										onMouseDown={handleMouseDownPassword}
+										edge="end"
+									>
+										{showPassword ? <VisibilityOff /> : <Visibility />}
+									</IconButton>
+								</InputAdornment>
+							),
+						}}
 					/>
 
-					<SubmitButton variant="contained" onClick={(e) => onSubmit(e)}>
-						Ingresar
-					</SubmitButton>
+					<LoginButton
+						variant="contained"
+						type="submit"
+						disabled={loading ? true : false}
+					>
+						{loading ? <CircularProgress color="inherit" /> : "Ingresar"}
+					</LoginButton>
+					<RegisterBox>
+						¿Necesitas una cuenta?
+						<CustomLinkRegister
+							to="/register"
+							onClick={() => dispatch(setIsOpen(!isOpen))}
+						>
+							Registrarse
+						</CustomLinkRegister>
+					</RegisterBox>
 				</FormBox>
 			</MainContent>
 			<Background
 				isOpen={isOpen}
-				onClick={() => setIsOpen(!isOpen)}
+				onClick={() => dispatch(setIsOpen(!isOpen))}
 			></Background>
 		</>
 	);
@@ -92,27 +175,27 @@ const LoginSidebar = ({ isOpen, setIsOpen }) => {
 export default LoginSidebar;
 
 const Background = styled(Box)(({ isOpen }) => ({
-	position: "absolute",
+	position: "fixed",
 	top: 0,
 	width: "100%",
-	height: "100vh",
+	minHeight: "100vh",
 	background: "rgba(0,0,0,.5)",
 	visibility: isOpen ? "auto" : "hidden",
 	opacity: isOpen ? 1 : 0,
-	zIndex: isOpen ? 10 : 0,
-	transition: "all .7s ease",
+	zIndex: isOpen ? 15 : 0,
+	transition: "all .4s ease .1s",
 }));
 
 const MainContent = styled(Box)(({ isOpen }) => ({
 	width: isOpen ? "30%" : "0",
 	overflow: isOpen ? "auto" : "hidden",
-	height: "100vh",
-	position: "absolute",
+	minHeight: "100vh",
+	position: "fixed",
 	top: 0,
 	right: 0,
-	zIndex: isOpen ? 11 : 0,
+	zIndex: isOpen ? 16 : 0,
 	background: "#eeeeee",
-	transition: "width .5s ease",
+	transition: "width .2s ease",
 }));
 
 const CloseButton = styled(Box)(() => ({
@@ -122,8 +205,8 @@ const CloseButton = styled(Box)(() => ({
 	justifyContent: "flex-end",
 }));
 
-const FormBox = styled(Box)(() => ({
-	width: "330px",
+const FormBox = styled("form")(() => ({
+	width: "390px",
 	background: "#ffffff",
 	borderRadius: "10px",
 	display: "flex",
@@ -136,20 +219,63 @@ const FormBox = styled(Box)(() => ({
 
 const LoginTitle = styled("h2")(() => ({
 	width: "100%",
-	textAlign: "left",
+	textAlign: "center",
 	margin: "40px 0 30px 0",
 }));
 
 const Input = styled(TextField)(() => ({
 	width: "100%",
 	marginBottom: "20px",
+	"& .MuiOutlinedInput-root": {
+		"& fieldset": {
+			borderColor: "rgb(58,131,150)",
+		},
+		"&.Mui-focused fieldset": {
+			borderColor: "rgb(58,131,150)",
+		},
+		"&:hover fieldset": {
+			borderColor: "rgb(70,161,185)",
+		},
+	},
+	"& input:valid + fieldset": {
+		borderColor: "rgb(58,131,150)",
+	},
+	"& .MuiInput-underline:after": {
+		borderBottomColor: "rgb(58,131,150)",
+	},
+	"& label.Mui-focused": {
+		color: "rgb(58,131,150)",
+	},
 }));
 
-const SubmitButton = styled(Button)(() => ({
+const LoginButton = styled(Button)(() => ({
 	width: "100%",
-	height: "40px",
-	borderRadius: "20px",
-	textTransform: "capitalize",
-	fontWeight: "bold",
-	margin: "10px 0",
+	height: "50px",
+	borderRadius: "5px",
+	background: "rgba(58,131,150,1)",
+	margin: "10px 0 20px 0",
+
+	"&:hover": {
+		background: "rgba(70,161,185,1)",
+	},
+}));
+
+const RegisterBox = styled(Box)(() => ({
+	width: "100%",
+	display: "flex",
+	justifyContent: "center",
+	alignItems: "center",
+	color: "#999999",
+	marginBottom: "10px",
+}));
+
+const CustomLinkRegister = styled(Link)(() => ({
+	textDecoration: "none",
+	color: "rgba(58,131,150,1)",
+	marginLeft: "5px",
+	cursor: "pointer",
+
+	"&:hover": {
+		color: "rgba(70,161,185,1)",
+	},
 }));

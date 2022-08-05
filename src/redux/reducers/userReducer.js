@@ -1,7 +1,8 @@
-import { LOGIN, LOGOUT } from "../../types/index";
+import { LOGIN, LOGOUT, HANDLE_INTERN_SIDEBAR } from "../../types/index";
 
 const initialState = {
 	userInfo: [],
+	isOpen: true,
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -15,6 +16,11 @@ export const userReducer = (state = initialState, action) => {
 			return {
 				...state,
 				userInfo: [],
+			};
+		case HANDLE_INTERN_SIDEBAR:
+			return {
+				...state,
+				isOpen: action.payload,
 			};
 		default:
 			return state;
