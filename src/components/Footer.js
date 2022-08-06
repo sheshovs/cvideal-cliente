@@ -6,7 +6,7 @@ const Footer = () => {
 		<FooterBox>
 			<MainBox></MainBox>
 			<CreditsBox>
-				Desarrollado con ❤️ por
+				Desarrollado con ♥ por
 				<Author href="https://github.com/sheshovs" target="_blank">
 					Sergio Vargas
 				</Author>

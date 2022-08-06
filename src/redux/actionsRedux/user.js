@@ -38,6 +38,26 @@ export const setIsOpen = (isOpen) => {
 	};
 };
 
+export const forgotPassword = (email) => {
+	return async (dispatch) => {
+		const { data, status } = await user.ForgotPassword(email);
+		if (status === 200) {
+			return { status: true, message: data.message };
+		}
+		return { status: false, message: data.error };
+	};
+};
+
+export const createNewPassword = (newPassword, token) => {
+	return async (dispatch) => {
+		const { data, status } = await user.NewPassword(newPassword, token);
+		if (status === 200) {
+			return { status: true, message: data.message };
+		}
+		return { status: false, message: data.error };
+	};
+};
+
 const userLogin = (user) => ({
 	type: LOGIN,
 	payload: user,

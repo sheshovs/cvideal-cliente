@@ -115,10 +115,13 @@ const user = {
 	},
 	NewPassword: async (newPassword, token) => {
 		try {
-			const resp = await clienteAxios.patch(NewPasswordURL, {
-				newPassword,
-				headers: { reset: token },
-			});
+			const resp = await clienteAxios.patch(
+				NewPasswordURL,
+				{ newPassword },
+				{
+					headers: { reset: token },
+				}
+			);
 			return resp;
 		} catch (error) {
 			return error.response;

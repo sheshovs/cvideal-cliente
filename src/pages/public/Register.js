@@ -16,25 +16,26 @@ import { useSelector, useDispatch } from "react-redux";
 // components
 import Navbar from "../../components/Navbar";
 import LoginSidebar from "../../components/LoginSidebar";
-import Header from "../../components/Header";
+import Header2 from "../../components/Header2";
+import Footer from "../../components/Footer";
 
 // icons
 import { Visibility, VisibilityOff, Close, Check } from "@mui/icons-material";
 
 // actions
 import { setIsOpen } from "../../redux/actionsRedux/loginSidebar";
-import Footer from "../../components/Footer";
 import { register } from "../../redux/actionsRedux/user";
 
 const mayusculas = /([A-Z])/;
 const simbolos = /[-’/`~!#*$@_%+=.,^&(){}[\]|;:”<>?\\]/;
 const numeros = /\d/;
+const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 const Register = () => {
 	const dispatch = useDispatch();
 	const [showPassword, setShowPassword] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [openAlert, setOpenAlert] = React.useState(false);
+	const [openAlert, setOpenAlert] = useState(false);
 	const { isOpen } = useSelector((x) => x.useLoginSidebar);
 	const [userData, setUserData] = useState({
 		first_name: "",
@@ -114,6 +115,15 @@ const Register = () => {
 				...alertData,
 				type: "error",
 				message: "Campo email no puede estar vacío",
+			});
+			setLoading(false);
+			setOpenAlert(true);
+			return;
+		} else if (!emailRegex.test(email)) {
+			setAlertData({
+				...alertData,
+				type: "error",
+				message: "Debe ingresar un correo electrónico válido",
 			});
 			setLoading(false);
 			setOpenAlert(true);
@@ -220,14 +230,17 @@ const Register = () => {
 			/>
 			<Container>
 				<Navbar />
-				<Header />
-				<RegisterBox>
+				<Header2
+					title="¿Necesitas una cuenta?"
+					description="Completa los campos a continuación y empieza a utilizar nuestra plataforma."
+				/>
+				<ComponentBox>
 					<FormBox onSubmit={(e) => onSubmit(e)}>
-						<RegisterTitle>Crear una cuenta</RegisterTitle>
-						<RegisterDescription>
+						<Title>Crear una cuenta</Title>
+						<Description>
 							Completa los siguientes campos y comienza a <br /> crear tu
 							<b> Curriculum Vitae Online</b>!
-						</RegisterDescription>
+						</Description>
 						<NameBox>
 							<InputMid
 								label="Nombre"
@@ -344,13 +357,13 @@ const Register = () => {
 							</ValidateBox>
 						) : null}
 
-						<RegisterButton
+						<SubmitButton
 							variant="contained"
 							type="submit"
 							disabled={loading ? true : false}
 						>
 							{loading ? <CircularProgress color="inherit" /> : "Crear cuenta"}
-						</RegisterButton>
+						</SubmitButton>
 						<LoginBox>
 							¿Ya tienes una cuenta?
 							<CustomLinkLogin onClick={() => dispatch(setIsOpen(!isOpen))}>
@@ -358,7 +371,7 @@ const Register = () => {
 							</CustomLinkLogin>
 						</LoginBox>
 					</FormBox>
-				</RegisterBox>
+				</ComponentBox>
 				<Footer />
 			</Container>
 		</>
@@ -372,7 +385,7 @@ const Container = styled(Box)(() => ({
 	minHeight: "100vh",
 }));
 
-const RegisterBox = styled(Box)(() => ({
+const ComponentBox = styled(Box)(() => ({
 	background: "#ffffff",
 	width: "100%",
 	padding: "20px 30px",
@@ -381,14 +394,14 @@ const RegisterBox = styled(Box)(() => ({
 	justifyContent: "center",
 }));
 
-const RegisterTitle = styled("h1")(() => ({
+const Title = styled("h1")(() => ({
 	width: "100%",
 	textAlign: "center",
 	color: "#0F2930",
 	marginBottom: "10px",
 }));
 
-const RegisterDescription = styled("p")(() => ({
+const Description = styled("p")(() => ({
 	width: "100%",
 	textAlign: "center",
 	color: "#999999",
@@ -482,7 +495,7 @@ const LastInput = styled(TextField)(() => ({
 	},
 }));
 
-const RegisterButton = styled(Button)(() => ({
+const SubmitButton = styled(Button)(() => ({
 	width: "100%",
 	height: "50px",
 	borderRadius: "5px",

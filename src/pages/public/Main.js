@@ -6,7 +6,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 const Main = () => {
-	const [openAlert, setOpenAlert] = React.useState(false);
+	const [openAlert, setOpenAlert] = useState(false);
 	const [alertData, setAlertData] = useState({
 		message: "",
 		type: "",

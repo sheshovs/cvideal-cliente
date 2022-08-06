@@ -36,7 +36,7 @@ const MainBox = styled(Box)(() => ({
 	width: "100%",
 	height: "100%",
 	background:
-		"linear-gradient(130deg, rgba(0,0,0,.5) 0%, rgba(65, 185, 214,1) 60%)",
+		"linear-gradient(130deg, rgba(0,0,0,.4) 0% , rgba(65, 185, 214,1) 33%  66% , rgba(255,255,255,.4) 100%)",
 	display: "flex",
 	padding: "40px",
 	boxSizing: "border-box",

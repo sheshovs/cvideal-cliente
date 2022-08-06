@@ -9,6 +9,7 @@ import {
 	PublicCv,
 	ForgotPassword,
 	NewPassword,
+	FAQ,
 } from "./pages/public";
 import {
 	Dashboard,
@@ -31,6 +32,7 @@ root.render(
 					<Route path="/" element={<Main />} exact />
 					<Route path="/register" element={<Register />} />
 					<Route path="/u/:url" element={<PublicCv />} />
+					<Route path="/faq" element={<FAQ />} />
 					<Route path="/forgot-password" element={<ForgotPassword />} />
 					<Route path="/new-password/:token" element={<NewPassword />} />
 
