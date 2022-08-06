@@ -4,6 +4,8 @@ const LoginURL = "/user/login";
 const RegisterURL = "/user/register";
 const UserURL = "/user";
 const UsersURL = "/users";
+const ForgotPasswordURL = "/user/forgot-password";
+const NewPasswordURL = "/user/new-password";
 
 const user = {
 	Login: async ({ email, password }) => {
@@ -97,6 +99,26 @@ const user = {
 	GetUsers: async () => {
 		try {
 			const resp = await clienteAxios.get(UsersURL);
+			return resp;
+		} catch (error) {
+			return error.response;
+		}
+	},
+
+	ForgotPassword: async (email) => {
+		try {
+			const resp = await clienteAxios.patch(ForgotPasswordURL, { email });
+			return resp;
+		} catch (error) {
+			return error.response;
+		}
+	},
+	NewPassword: async (newPassword, token) => {
+		try {
+			const resp = await clienteAxios.patch(NewPasswordURL, {
+				newPassword,
+				headers: { reset: token },
+			});
 			return resp;
 		} catch (error) {
 			return error.response;

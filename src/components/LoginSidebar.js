@@ -10,6 +10,7 @@ import {
 	IconButton,
 	InputAdornment,
 } from "@mui/material";
+import LogoCv from "../assets/img/logo-cv-transparent.png";
 
 //actions
 import { setIsOpen } from "../redux/actionsRedux/loginSidebar";
@@ -103,6 +104,7 @@ const LoginSidebar = ({ alertData, setAlertData, setOpenAlert }) => {
 		<>
 			<MainContent isOpen={isOpen}>
 				<CloseButton>
+					<Logo src={LogoCv} alt="Logo CV Ideal" />
 					<Close
 						onClick={() => dispatch(setIsOpen(!isOpen))}
 						color="disabled"
@@ -145,6 +147,14 @@ const LoginSidebar = ({ alertData, setAlertData, setOpenAlert }) => {
 							),
 						}}
 					/>
+					<ForgotPasswordBox>
+						<CustomLinkForgot
+							to="/forgot-password"
+							onClick={() => dispatch(setIsOpen(!isOpen))}
+						>
+							¿Olvidaste tu contraseña?
+						</CustomLinkForgot>
+					</ForgotPasswordBox>
 
 					<LoginButton
 						variant="contained"
@@ -202,7 +212,12 @@ const CloseButton = styled(Box)(() => ({
 	width: "390px",
 	margin: "20px auto",
 	display: "flex",
-	justifyContent: "flex-end",
+	justifyContent: "space-between",
+	alignItems: "center",
+}));
+
+const Logo = styled("img")(() => ({
+	height: "50px",
 }));
 
 const FormBox = styled("form")(() => ({
@@ -245,6 +260,25 @@ const Input = styled(TextField)(() => ({
 	},
 	"& label.Mui-focused": {
 		color: "rgb(58,131,150)",
+	},
+}));
+
+const ForgotPasswordBox = styled(Box)(() => ({
+	width: "100%",
+	display: "flex",
+	justifyContent: "flex-end",
+	alignItems: "center",
+}));
+
+const CustomLinkForgot = styled(Link)(() => ({
+	textDecoration: "none",
+	color: "rgba(58,131,150,1)",
+	marginLeft: "5px",
+	marginBottom: "10px",
+	cursor: "pointer",
+
+	"&:hover": {
+		color: "rgba(70,161,185,1)",
 	},
 }));
 

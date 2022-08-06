@@ -3,7 +3,13 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./assets/css/main.css";
 //Rutas públicas
-import { Main, Register, PublicCv } from "./pages/public";
+import {
+	Main,
+	Register,
+	PublicCv,
+	ForgotPassword,
+	NewPassword,
+} from "./pages/public";
 import {
 	Dashboard,
 	Projects,
@@ -25,6 +31,8 @@ root.render(
 					<Route path="/" element={<Main />} exact />
 					<Route path="/register" element={<Register />} />
 					<Route path="/u/:url" element={<PublicCv />} />
+					<Route path="/forgot-password" element={<ForgotPassword />} />
+					<Route path="/new-password/:token" element={<NewPassword />} />
 
 					<Route element={<PrivateRoutes />}>
 						<Route element={<Dashboard />} path="/dashboard" />

@@ -3,6 +3,7 @@ import { Box, styled, Button } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { setIsOpen } from "../redux/actionsRedux/loginSidebar";
 import { Link } from "react-router-dom";
+import LogoCv from "../assets/img/logo-cv.jpg";
 
 const Navbar = () => {
 	const dispatch = useDispatch();
@@ -10,7 +11,9 @@ const Navbar = () => {
 	return (
 		<NavbarBox>
 			<ContainerMenu>
-				<LogoBox>CvIdeal</LogoBox>
+				<LogoBox>
+					<Logo src={LogoCv} alt="Logo CV Ideal" />
+				</LogoBox>
 				<Menu>
 					<MenuItem>
 						<CustomLink to="/">Inicio</CustomLink>
@@ -65,6 +68,10 @@ const LogoBox = styled(Box)(() => ({
 	justifyContent: "center",
 	alignItems: "center",
 	fontSize: "2rem",
+}));
+
+const Logo = styled("img")(() => ({
+	height: "90%",
 }));
 
 const Menu = styled("ul")(() => ({
