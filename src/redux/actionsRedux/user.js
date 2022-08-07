@@ -1,5 +1,10 @@
 import user from "../requests/user";
-import { LOGIN, LOGOUT, HANDLE_INTERN_SIDEBAR } from "../../types/index";
+import {
+	LOGIN,
+	LOGOUT,
+	HANDLE_INTERN_SIDEBAR,
+	GET_USER_INFO,
+} from "../../types/index";
 
 export const login = (userData) => {
 	return async (dispatch) => {
@@ -16,8 +21,8 @@ export const login = (userData) => {
 
 export const logout = () => {
 	return async (dispatch) => {
-		dispatch(userLogout());
 		localStorage.removeItem("token");
+		dispatch(userLogout());
 		return { status: true };
 	};
 };
@@ -58,6 +63,17 @@ export const createNewPassword = (newPassword, token) => {
 	};
 };
 
+export const getUserByToken = () => {
+	return async (dispatch) => {
+		const { data, status } = await user.GetUserByID();
+		if (status === 200) {
+			dispatch(getUserInfo(data.data[0]));
+			return { status: true, message: data.message };
+		}
+		return { status: false, message: data.error };
+	};
+};
+
 const userLogin = (user) => ({
 	type: LOGIN,
 	payload: user,
@@ -65,6 +81,11 @@ const userLogin = (user) => ({
 
 const userLogout = () => ({
 	type: LOGOUT,
+});
+
+const getUserInfo = (user) => ({
+	type: GET_USER_INFO,
+	payload: user,
 });
 
 const handleSidebar = (isOpen) => ({

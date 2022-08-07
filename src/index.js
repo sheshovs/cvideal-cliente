@@ -11,17 +11,11 @@ import {
 	NewPassword,
 	FAQ,
 } from "./pages/public";
-import {
-	Dashboard,
-	Projects,
-	Experiences,
-	Certificates,
-	Cv,
-	Profile,
-} from "./pages/private";
+
 import { PrivateRoutes } from "./utils/PrivateRoutes";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
+import DashboardLayout from "./layouts/DashboardLayout";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -37,12 +31,7 @@ root.render(
 					<Route path="/new-password/:token" element={<NewPassword />} />
 
 					<Route element={<PrivateRoutes />}>
-						<Route element={<Dashboard />} path="/dashboard" />
-						<Route element={<Projects />} path="/projects" />
-						<Route element={<Experiences />} path="/experiences" />
-						<Route element={<Certificates />} path="/certificates" />
-						<Route element={<Cv />} path="/cv" />
-						<Route element={<Profile />} path="/profile" />
+						<Route path="/admin/*" element={<DashboardLayout />} />
 					</Route>
 
 					<Route path="*" element={<Navigate to="/" replace />} />

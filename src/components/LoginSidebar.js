@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import {
@@ -85,7 +85,7 @@ const LoginSidebar = ({ alertData, setAlertData, setOpenAlert }) => {
 				setOpenAlert(true);
 				setLoading(false);
 				dispatch(setIsOpen(!isOpen));
-				return navigate("/dashboard");
+				return navigate("/admin/dashboard");
 			} else {
 				setAlertData({
 					...alertData,
@@ -209,7 +209,7 @@ const MainContent = styled(Box)(({ isOpen }) => ({
 }));
 
 const CloseButton = styled(Box)(() => ({
-	width: "390px",
+	width: "90%",
 	margin: "20px auto",
 	display: "flex",
 	justifyContent: "space-between",
@@ -221,7 +221,7 @@ const Logo = styled("img")(() => ({
 }));
 
 const FormBox = styled("form")(() => ({
-	width: "390px",
+	width: "90%",
 	background: "#ffffff",
 	borderRadius: "10px",
 	display: "flex",
