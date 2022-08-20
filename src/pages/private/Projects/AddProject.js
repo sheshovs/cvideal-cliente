@@ -10,13 +10,14 @@ import {
 	Button,
 } from "@mui/material";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { uploadFile } from "../../../redux/actionsRedux/file";
 import { createProject } from "../../../redux/actionsRedux/project";
 
 const AddProject = ({ alertData, setAlertData, setOpenAlert }) => {
 	const dispatch = useDispatch();
-
-	const sizeMax = 3145728;
+	const navigate = useNavigate();
+	// const sizeMax = 3145728;
 
 	const [projectData, setProjectData] = React.useState({
 		name: "",
@@ -25,12 +26,10 @@ const AddProject = ({ alertData, setAlertData, setOpenAlert }) => {
 		project_date: new Date().toISOString().slice(0, 10),
 		github_url: "",
 		demo_url: "",
-		cover_img_url: "",
-		img_urls: [],
 	});
 
-	const [coverImg, setCoverImg] = React.useState();
-	const [projectsImgs, setProjectsImgs] = React.useState();
+	// const [coverImg, setCoverImg] = React.useState();
+	// const [projectsImgs, setProjectsImgs] = React.useState();
 
 	const handleChange = (event) => {
 		setProjectData({
@@ -39,48 +38,48 @@ const AddProject = ({ alertData, setAlertData, setOpenAlert }) => {
 		});
 	};
 
-	const handleCoverImg = (event) => {
-		let file = event.target.files[0];
-		if (file.size > sizeMax) {
-			setAlertData({
-				...alertData,
-				type: "error",
-				message: "La imagen debe pesar máximo 3MB.",
-			});
-			setOpenAlert(true);
-			return;
-		}
-		setCoverImg(file);
-	};
+	// const handleCoverImg = (event) => {
+	// 	let file = event.target.files[0];
+	// 	if (file.size > sizeMax) {
+	// 		setAlertData({
+	// 			...alertData,
+	// 			type: "error",
+	// 			message: "La imagen debe pesar máximo 3MB.",
+	// 		});
+	// 		setOpenAlert(true);
+	// 		return;
+	// 	}
+	// 	setCoverImg(file);
+	// };
 
-	const handleProjectImgs = (event) => {
-		let files = event.target.files;
-		let arrImgs = [];
-		if (files.length > 3) {
-			setAlertData({
-				...alertData,
-				type: "error",
-				message: "Debe ingresar máximo 3 imágenes.",
-			});
-			setOpenAlert(true);
-			return;
-		}
+	// const handleProjectImgs = (event) => {
+	// 	let files = event.target.files;
+	// 	let arrImgs = [];
+	// 	if (files.length > 3) {
+	// 		setAlertData({
+	// 			...alertData,
+	// 			type: "error",
+	// 			message: "Debe ingresar máximo 3 imágenes.",
+	// 		});
+	// 		setOpenAlert(true);
+	// 		return;
+	// 	}
 
-		Object.keys(files).map((index) => {
-			if (files[index].size > sizeMax) {
-				setAlertData({
-					...alertData,
-					type: "error",
-					message: "La imagen debe pesar máximo 3MB.",
-				});
-				setOpenAlert(true);
-				return;
-			}
-			arrImgs.push(files[index]);
-		});
+	// 	Object.keys(files).map((index) => {
+	// 		if (files[index].size > sizeMax) {
+	// 			setAlertData({
+	// 				...alertData,
+	// 				type: "error",
+	// 				message: "La imagen debe pesar máximo 3MB.",
+	// 			});
+	// 			setOpenAlert(true);
+	// 			return;
+	// 		}
+	// 		arrImgs.push(files[index]);
+	// 	});
 
-		setProjectsImgs(arrImgs);
-	};
+	// 	setProjectsImgs(arrImgs);
+	// };
 
 	const handleSubmit = () => {
 		if (!projectData.name) {
@@ -119,60 +118,73 @@ const AddProject = ({ alertData, setAlertData, setOpenAlert }) => {
 			setOpenAlert(true);
 			return;
 		}
-		if (coverImg) {
-			if (coverImg.size > sizeMax) {
-				setAlertData({
-					...alertData,
-					type: "error",
-					message: "La imagen debe pesar máximo 3MB.",
-				});
-				setOpenAlert(true);
-				return;
-			}
-		}
-		if (projectsImgs.length > 3) {
-			setAlertData({
-				...alertData,
-				type: "error",
-				message: "Debe ingresar máximo 3 imágenes.",
-			});
-			setOpenAlert(true);
-			return;
-		}
-		if (projectsImgs) {
-			projectsImgs.map((file) => {
-				if (file.size > sizeMax) {
-					setAlertData({
-						...alertData,
-						type: "error",
-						message: "La imagen debe pesar máximo 3MB.",
-					});
-					setOpenAlert(true);
-					return;
-				}
-			});
-		}
+		// if (coverImg) {
+		// 	if (coverImg.size > sizeMax) {
+		// 		setAlertData({
+		// 			...alertData,
+		// 			type: "error",
+		// 			message: "La imagen debe pesar máximo 3MB.",
+		// 		});
+		// 		setOpenAlert(true);
+		// 		return;
+		// 	}
+		// }
 
-		let projectsImgsURL = [];
-		let coverImgURL = "";
+		// if (projectsImgs) {
+		// 	if (projectsImgs.length > 3) {
+		// 		setAlertData({
+		// 			...alertData,
+		// 			type: "error",
+		// 			message: "Debe ingresar máximo 3 imágenes.",
+		// 		});
+		// 		setOpenAlert(true);
+		// 		return;
+		// 	}
+		// 	projectsImgs.map((file) => {
+		// 		if (file.size > sizeMax) {
+		// 			setAlertData({
+		// 				...alertData,
+		// 				type: "error",
+		// 				message: "La imagen debe pesar máximo 3MB.",
+		// 			});
+		// 			setOpenAlert(true);
+		// 			return;
+		// 		}
+		// 	});
+		// }
 
-		projectsImgs.map((file) => {
-			dispatch(uploadFile(file)).then((res) => {
-				if (!res.status) {
-					setAlertData({
-						...alertData,
-						type: "error",
-						message: "Error al subir una imagen",
-					});
-					setOpenAlert(true);
-				}
-				projectsImgsURL.push(res.url);
-			});
-		});
+		// let img_urls = [];
+		// let cover_img_url = "";
 
-		dispatch(uploadFile(coverImg)).then((res) => {
-			coverImgURL = res.url;
-		});
+		// if (projectsImgs) {
+		// 	projectsImgs.map((file) => {
+		// 		dispatch(uploadFile(file)).then((res) => {
+		// 			if (!res.status) {
+		// 				setAlertData({
+		// 					...alertData,
+		// 					type: "error",
+		// 					message: "Error al subir una de las imágenes del proyecto.",
+		// 				});
+		// 				setOpenAlert(true);
+		// 			}
+		// 			img_urls.push(res.url);
+		// 		});
+		// 	});
+		// }
+
+		// if (coverImg) {
+		// 	dispatch(uploadFile(coverImg)).then((res) => {
+		// 		if (!res.status) {
+		// 			setAlertData({
+		// 				...alertData,
+		// 				type: "error",
+		// 				message: "Error al subir portada del proyecto.",
+		// 			});
+		// 			setOpenAlert(true);
+		// 		}
+		// 		cover_img_url = res.url;
+		// 	});
+		// }
 
 		dispatch(
 			createProject({
@@ -182,10 +194,33 @@ const AddProject = ({ alertData, setAlertData, setOpenAlert }) => {
 				project_date,
 				github_url,
 				demo_url,
-				coverImgURL,
-				projectsImgsURL,
 			})
-		).then((res) => console.log(res));
+		).then((res) => {
+			if (res.status) {
+				setAlertData({
+					...alertData,
+					type: "success",
+					message: res.message,
+				});
+				setOpenAlert(true);
+				setProjectData({
+					name: "",
+					description: "",
+					type: "",
+					project_date: new Date().toISOString().slice(0, 10),
+					github_url: "",
+					demo_url: "",
+				});
+				navigate("/admin/projects");
+			} else {
+				setAlertData({
+					...alertData,
+					type: "error",
+					message: res.error,
+				});
+				setOpenAlert(true);
+			}
+		});
 	};
 
 	const { name, description, type, project_date, github_url, demo_url } =
@@ -244,26 +279,9 @@ const AddProject = ({ alertData, setAlertData, setOpenAlert }) => {
 						/>
 					</FormBox>
 				</PrimaryInfo>
-				<Title>Links</Title>
-				<PrimaryInfo>
-					<InputLinks
-						label="Github URL"
-						variant="outlined"
-						name="github_url"
-						value={github_url}
-						onChange={handleChange}
-					/>
-					<InputLinks
-						label="Demo URL"
-						variant="outlined"
-						name="demo_url"
-						value={demo_url}
-						onChange={handleChange}
-					/>
-				</PrimaryInfo>
 			</LeftSide>
 			<RightSide>
-				<ImgsBox>
+				{/* <SeparateBox>
 					<Title>Portada</Title>
 					<PrimaryInfo>
 						<input
@@ -285,7 +303,26 @@ const AddProject = ({ alertData, setAlertData, setOpenAlert }) => {
 						/>
 						<HelperText>Máximo 3 imágenes.</HelperText>
 					</PrimaryInfo>
-				</ImgsBox>
+				</SeparateBox> */}
+				<SeparateBox>
+					<Title>Links</Title>
+					<PrimaryInfo>
+						<InputLinks
+							label="Github URL"
+							variant="outlined"
+							name="github_url"
+							value={github_url}
+							onChange={handleChange}
+						/>
+						<InputLinks
+							label="Demo URL"
+							variant="outlined"
+							name="demo_url"
+							value={demo_url}
+							onChange={handleChange}
+						/>
+					</PrimaryInfo>
+				</SeparateBox>
 				<SubmitButtonBox>
 					<Button
 						color="primary"
@@ -319,9 +356,10 @@ const RightSide = styled(Box)(() => ({
 	flexDirection: "column",
 	justifyContent: "space-between",
 }));
-const ImgsBox = styled(Box)(() => ({
+const SeparateBox = styled(Box)(() => ({
 	display: "flex",
 	flexDirection: "column",
+	width: "80%",
 }));
 const SubmitButtonBox = styled(Box)(() => ({
 	width: "100%",

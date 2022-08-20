@@ -1,4 +1,4 @@
-import clienteAxios from "../../utils/clienteAxios";
+import clienteAxios from "../../utils/axios";
 
 const ProjectURL = "/project";
 const ProjectsURL = "/projects";
@@ -17,17 +17,22 @@ const project = {
 	}) => {
 		try {
 			const token = localStorage.getItem("token");
-			const resp = await clienteAxios.post(ProjectURL, {
-				name,
-				description,
-				type,
-				project_date,
-				cover_img_url,
-				demo_url,
-				github_url,
-				img_urls,
-				headers: { token },
-			});
+			const resp = await clienteAxios.post(
+				ProjectURL,
+				{
+					name,
+					description,
+					type,
+					project_date,
+					cover_img_url,
+					demo_url,
+					github_url,
+					img_urls,
+				},
+				{
+					headers: { token },
+				}
+			);
 			return resp;
 		} catch (error) {
 			return error.response;

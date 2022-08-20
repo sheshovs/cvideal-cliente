@@ -3,7 +3,7 @@ import { CREATE_PROJECT } from "../../types/index";
 
 export const createProject = (projectData) => {
 	return async (dispatch) => {
-		const { data, status } = await project.createProject(projectData);
+		const { data, status } = await project.CreateProject(projectData);
 		if (status === 200) {
 			dispatch(action(CREATE_PROJECT, data.data));
 			return { status: true, message: data.message, data: data.data };

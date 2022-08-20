@@ -1,4 +1,4 @@
-import { CREATE_PROJECT } from "types";
+import { CREATE_PROJECT } from "../../types/index";
 
 const initialState = {
 	currentProject: {},
