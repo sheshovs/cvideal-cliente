@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { uploadFile } from "../../../redux/actionsRedux/file";
+import { createProject } from "../../../redux/actionsRedux/project";
 
 const AddProject = ({ alertData, setAlertData, setOpenAlert }) => {
 	const dispatch = useDispatch();
@@ -129,6 +130,15 @@ const AddProject = ({ alertData, setAlertData, setOpenAlert }) => {
 				return;
 			}
 		}
+		if (projectsImgs.length > 3) {
+			setAlertData({
+				...alertData,
+				type: "error",
+				message: "Debe ingresar máximo 3 imágenes.",
+			});
+			setOpenAlert(true);
+			return;
+		}
 		if (projectsImgs) {
 			projectsImgs.map((file) => {
 				if (file.size > sizeMax) {
@@ -142,6 +152,40 @@ const AddProject = ({ alertData, setAlertData, setOpenAlert }) => {
 				}
 			});
 		}
+
+		let projectsImgsURL = [];
+		let coverImgURL = "";
+
+		projectsImgs.map((file) => {
+			dispatch(uploadFile(file)).then((res) => {
+				if (!res.status) {
+					setAlertData({
+						...alertData,
+						type: "error",
+						message: "Error al subir una imagen",
+					});
+					setOpenAlert(true);
+				}
+				projectsImgsURL.push(res.url);
+			});
+		});
+
+		dispatch(uploadFile(coverImg)).then((res) => {
+			coverImgURL = res.url;
+		});
+
+		dispatch(
+			createProject({
+				name,
+				description,
+				type,
+				project_date,
+				github_url,
+				demo_url,
+				coverImgURL,
+				projectsImgsURL,
+			})
+		).then((res) => console.log(res));
 	};
 
 	const { name, description, type, project_date, github_url, demo_url } =
