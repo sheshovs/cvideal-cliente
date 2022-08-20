@@ -7,49 +7,175 @@ import {
 	InputLabel,
 	Select,
 	MenuItem,
+	Button,
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { uploadFile } from "../../../redux/actionsRedux/file";
 
-const AddProject = () => {
+const AddProject = ({ alertData, setAlertData, setOpenAlert }) => {
 	const dispatch = useDispatch();
-	const [type, setType] = React.useState("");
-	const [coverImg, setCoverImg] = React.useState("");
+
+	const sizeMax = 3145728;
+
+	const [projectData, setProjectData] = React.useState({
+		name: "",
+		description: "",
+		type: "",
+		project_date: new Date().toISOString().slice(0, 10),
+		github_url: "",
+		demo_url: "",
+		cover_img_url: "",
+		img_urls: [],
+	});
+
+	const [coverImg, setCoverImg] = React.useState();
+	const [projectsImgs, setProjectsImgs] = React.useState();
 
 	const handleChange = (event) => {
-		setType(event.target.value);
+		setProjectData({
+			...projectData,
+			[event.target.name]: event.target.value,
+		});
 	};
 
 	const handleCoverImg = (event) => {
-		console.log(event.target.files[0]);
 		let file = event.target.files[0];
-		if (file.size > 2000000) {
-			console.log("La imagen debe pesar máximo 2MB.");
+		if (file.size > sizeMax) {
+			setAlertData({
+				...alertData,
+				type: "error",
+				message: "La imagen debe pesar máximo 3MB.",
+			});
+			setOpenAlert(true);
 			return;
 		}
-		if (event.target.files.length > 0) {
-			dispatch(uploadFile(file)).then((x) => setCoverImg(x.url));
+		setCoverImg(file);
+	};
+
+	const handleProjectImgs = (event) => {
+		let files = event.target.files;
+		let arrImgs = [];
+		if (files.length > 3) {
+			setAlertData({
+				...alertData,
+				type: "error",
+				message: "Debe ingresar máximo 3 imágenes.",
+			});
+			setOpenAlert(true);
+			return;
+		}
+
+		Object.keys(files).map((index) => {
+			if (files[index].size > sizeMax) {
+				setAlertData({
+					...alertData,
+					type: "error",
+					message: "La imagen debe pesar máximo 3MB.",
+				});
+				setOpenAlert(true);
+				return;
+			}
+			arrImgs.push(files[index]);
+		});
+
+		setProjectsImgs(arrImgs);
+	};
+
+	const handleSubmit = () => {
+		if (!projectData.name) {
+			setAlertData({
+				...alertData,
+				type: "error",
+				message: "Debe ingresar el nombre del proyecto.",
+			});
+			setOpenAlert(true);
+			return;
+		}
+		if (!projectData.description) {
+			setAlertData({
+				...alertData,
+				type: "error",
+				message: "Debe ingresar la descripción del proyecto.",
+			});
+			setOpenAlert(true);
+			return;
+		}
+		if (!projectData.type) {
+			setAlertData({
+				...alertData,
+				type: "error",
+				message: "Debe seleccionar el tipo del proyecto.",
+			});
+			setOpenAlert(true);
+			return;
+		}
+		if (!projectData.project_date) {
+			setAlertData({
+				...alertData,
+				type: "error",
+				message: "Debe ingresar la fecha del proyecto.",
+			});
+			setOpenAlert(true);
+			return;
+		}
+		if (coverImg) {
+			if (coverImg.size > sizeMax) {
+				setAlertData({
+					...alertData,
+					type: "error",
+					message: "La imagen debe pesar máximo 3MB.",
+				});
+				setOpenAlert(true);
+				return;
+			}
+		}
+		if (projectsImgs) {
+			projectsImgs.map((file) => {
+				if (file.size > sizeMax) {
+					setAlertData({
+						...alertData,
+						type: "error",
+						message: "La imagen debe pesar máximo 3MB.",
+					});
+					setOpenAlert(true);
+					return;
+				}
+			});
 		}
 	};
+
+	const { name, description, type, project_date, github_url, demo_url } =
+		projectData;
 
 	return (
 		<ComponentBox>
 			<LeftSide>
 				<Title>Información básica</Title>
 				<PrimaryInfo>
-					<Input label="Nombre" variant="outlined" required />
+					<Input
+						label="Nombre"
+						variant="outlined"
+						required
+						name="name"
+						value={name}
+						onChange={handleChange}
+					/>
 					<InputArea
 						label="Descripción"
 						variant="outlined"
 						multiline
 						minRows={2}
 						required
+						name="description"
+						value={description}
+						onChange={handleChange}
 					/>
 					<FormBox>
 						<FormControlStyled>
 							<InputLabel id="type-select">Tipo *</InputLabel>
 							<Select
 								labelId="type-select"
+								name="type"
 								value={type}
 								label="Tipo *"
 								onChange={handleChange}
@@ -67,27 +193,65 @@ const AddProject = () => {
 							variant="outlined"
 							type="date"
 							label="Fecha"
-							defaultValue={new Date().toISOString().slice(0, 10)}
 							required
+							name="project_date"
+							value={project_date}
+							onChange={handleChange}
 						/>
 					</FormBox>
 				</PrimaryInfo>
 				<Title>Links</Title>
 				<PrimaryInfo>
-					<InputLinks label="Github URL" variant="outlined" />
-					<InputLinks label="Demo URL" variant="outlined" />
+					<InputLinks
+						label="Github URL"
+						variant="outlined"
+						name="github_url"
+						value={github_url}
+						onChange={handleChange}
+					/>
+					<InputLinks
+						label="Demo URL"
+						variant="outlined"
+						name="demo_url"
+						value={demo_url}
+						onChange={handleChange}
+					/>
 				</PrimaryInfo>
 			</LeftSide>
 			<RightSide>
-				<Title>Portada</Title>
-				<PrimaryInfo>
-					{coverImg ? <ImgCoverBox src={coverImg} alt="Portada" /> : null}
-					<input type="file" onChange={handleCoverImg} accept="image/*" />
-				</PrimaryInfo>
-				<Title>Imágenes</Title>
-				<PrimaryInfo>
-					<input type="file" accept="image/*" multiple />
-				</PrimaryInfo>
+				<ImgsBox>
+					<Title>Portada</Title>
+					<PrimaryInfo>
+						<input
+							type="file"
+							onChange={handleCoverImg}
+							accept="image/*"
+							name="cover_img_url"
+						/>
+						<HelperText>Tamaño máximo 3MB.</HelperText>
+					</PrimaryInfo>
+
+					<Title>Imágenes</Title>
+					<PrimaryInfo>
+						<input
+							type="file"
+							onChange={handleProjectImgs}
+							accept="image/*"
+							multiple
+						/>
+						<HelperText>Máximo 3 imágenes.</HelperText>
+					</PrimaryInfo>
+				</ImgsBox>
+				<SubmitButtonBox>
+					<Button
+						color="primary"
+						variant="contained"
+						size="large"
+						onClick={handleSubmit}
+					>
+						Crear Proyecto
+					</Button>
+				</SubmitButtonBox>
 			</RightSide>
 		</ComponentBox>
 	);
@@ -99,7 +263,6 @@ const ComponentBox = styled(Box)(() => ({
 	width: "100%",
 	display: "flex",
 	justifyContent: "space-between",
-	padding: "20px",
 }));
 const LeftSide = styled(Box)(() => ({
 	width: "45%",
@@ -110,6 +273,17 @@ const RightSide = styled(Box)(() => ({
 	width: "45%",
 	display: "flex",
 	flexDirection: "column",
+	justifyContent: "space-between",
+}));
+const ImgsBox = styled(Box)(() => ({
+	display: "flex",
+	flexDirection: "column",
+}));
+const SubmitButtonBox = styled(Box)(() => ({
+	width: "100%",
+	display: "flex",
+	justifyContent: "flex-end",
+	paddingRight: 25,
 }));
 const PrimaryInfo = styled(Box)(() => ({
 	width: "100%",
@@ -222,9 +396,9 @@ const InputLinks = styled(TextField)(() => ({
 		color: "rgb(58,131,150)",
 	},
 }));
-
-const ImgCoverBox = styled("img")(() => ({
-	width: "300px",
-	height: "200px",
-	marginBottom: "20px",
+const HelperText = styled("p")(() => ({
+	color: "#888888",
+	marginTop: 10,
+	marginLeft: 10,
+	fontSize: "14px",
 }));

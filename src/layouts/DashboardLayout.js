@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { styled, CircularProgress, Box } from "@mui/material";
+import {
+	styled,
+	CircularProgress,
+	Box,
+	Snackbar,
+	Alert,
+	Slide,
+} from "@mui/material";
 import Sidebar from "../components/Sidebar";
 import { DashboardBar } from "../components/DashboardBar";
 import {
@@ -17,6 +24,18 @@ const DashboardLayout = () => {
 	const location = useLocation();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const [openAlert, setOpenAlert] = useState(false);
+	const [alertData, setAlertData] = useState({
+		message: "",
+		type: "",
+	});
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+
+		setOpenAlert(false);
+	};
 	const [isLoading, setLoading] = useState(true);
 	const { isOpen } = useSelector((x) => x.useUser);
 	const token = localStorage.getItem("token");
@@ -52,7 +71,17 @@ const DashboardLayout = () => {
 		return routes.map((prop, key) => {
 			if (prop.layout === "/admin") {
 				return (
-					<Route path={prop.path} element={<prop.component />} key={key} />
+					<Route
+						path={prop.path}
+						element={
+							<prop.component
+								alertData={alertData}
+								setAlertData={setAlertData}
+								setOpenAlert={setOpenAlert}
+							/>
+						}
+						key={key}
+					/>
 				);
 			} else {
 				return null;
@@ -75,15 +104,33 @@ const DashboardLayout = () => {
 	if (isLoading) return <CircularProgress />;
 
 	return (
-		<Background>
-			<Sidebar routes={routelist(routes)} isOpen={isOpen} />
-			<MainContent>
-				<DashboardBar title={getActiveRoute(routes)} />
-				<ComponentBox>
-					<Routes>{getRoutes(routes)}</Routes>
-				</ComponentBox>
-			</MainContent>
-		</Background>
+		<>
+			<Snackbar
+				open={openAlert}
+				autoHideDuration={5000}
+				onClose={handleClose}
+				anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+				TransitionComponent={(props) => <Slide {...props} direction="left" />}
+			>
+				<Alert
+					onClose={handleClose}
+					severity={alertData.type}
+					variant="filled"
+					sx={{ width: "100%" }}
+				>
+					{alertData.message}
+				</Alert>
+			</Snackbar>
+			<Background>
+				<Sidebar routes={routelist(routes)} isOpen={isOpen} />
+				<MainContent>
+					<DashboardBar title={getActiveRoute(routes)} />
+					<ComponentBox>
+						<Routes>{getRoutes(routes)}</Routes>
+					</ComponentBox>
+				</MainContent>
+			</Background>
+		</>
 	);
 };
 
