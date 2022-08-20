@@ -1,16 +1,17 @@
-import clienteAxios from "../../utils/clienteAxios";
+import clienteAxios from "../../utils/axios";
 
 const FileURL = "/uploadfile";
 
 const file = {
 	uploadFile: async (file) => {
 		try {
+			const token = localStorage.getItem("token");
 			const formData = new FormData();
 			formData.append("file", file);
 
-			const resp = await clienteAxios.post(FileURL, {
-				formData,
+			const resp = await clienteAxios.post(FileURL, formData, {
 				headers: {
+					token,
 					"Content-Type": "multipart/form-data",
 				},
 			});

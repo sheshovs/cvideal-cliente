@@ -91,7 +91,7 @@ export default DashboardLayout;
 
 const Background = styled("div")(() => ({
 	width: "95%",
-	minHeight: "90vh",
+	height: "90vh",
 	display: "flex",
 	margin: "30px 0",
 	background:
@@ -108,6 +108,23 @@ const MainContent = styled("div")(() => ({
 
 const ComponentBox = styled(Box)(() => ({
 	width: "100%",
+	height: "85%",
 	display: "flex",
 	padding: "20px",
+	overflowY: "scroll",
+	"&::-webkit-scrollbar": {
+		width: "6px",
+	},
+
+	"&::-webkit-scrollbar-thumb": {
+		background: "rgba(150,150,150,1)",
+		borderRadius: "2px",
+	},
+
+	"&::-webkit-scrollbar-track": {
+		background: "rgba(255, 255, 255,0.2)",
+		borderRadius: "2px",
+		height: "80%",
+		display: "none",
+	},
 }));

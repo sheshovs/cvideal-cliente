@@ -23,7 +23,7 @@ const Sidebar = (props) => {
 	};
 
 	const activeRoute = (routeName) => {
-		return location.pathname === routeName
+		return location.pathname.includes(routeName)
 			? "active sidebar-item"
 			: "sidebar-item";
 	};
