@@ -1,13 +1,17 @@
 import React from "react";
 import { styled, Box } from "@mui/material";
+import { Link, useLocation } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 
 const Projects = () => {
+	const location = useLocation();
 	return (
-		<ProjectAddItem>
-			<AddIcon sx={{ color: "rgb(58, 163, 189)", fontSize: "40px" }} />
-			<ProjectAddItemTitle>Agregar Proyecto</ProjectAddItemTitle>
-		</ProjectAddItem>
+		<ItemLink to={location.pathname + "/add"}>
+			<ProjectAddItem>
+				<AddIcon sx={{ color: "rgb(58, 163, 189)", fontSize: "40px" }} />
+				<ProjectAddItemTitle>Agregar Proyecto</ProjectAddItemTitle>
+			</ProjectAddItem>
+		</ItemLink>
 	);
 };
 
@@ -39,4 +43,8 @@ const ProjectAddItemTitle = styled("h2")(() => ({
 	fontSize: "1.4rem",
 	color: "rgb(58, 163, 189)",
 	margin: 0,
+}));
+
+const ItemLink = styled(Link)(() => ({
+	textDecoration: "none",
 }));

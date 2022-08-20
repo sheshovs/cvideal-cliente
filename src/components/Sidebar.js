@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { styled, Icon } from "@mui/material";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout, setIsOpen } from "../redux/actionsRedux/user";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import "../assets/css/sidebar.css";
 
 //Icons

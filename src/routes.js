@@ -2,13 +2,13 @@
 //Private Imports
 import {
 	Dashboard,
-	Projects,
 	Experiences,
 	Certificates,
 	Cv,
 	Profile,
 	Settings,
 } from "./pages/private";
+import { Projects, AddProject } from "./pages/private/Projects";
 // Icons
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import FolderIcon from "@mui/icons-material/Folder";
@@ -34,6 +34,14 @@ var dashRoutes = [
 		icon: FolderIcon,
 		show: true,
 		component: Projects,
+		layout: "/admin",
+	},
+	{
+		path: "/projects/add",
+		name: "Agregar proyecto",
+		icon: FolderIcon,
+		show: false,
+		component: AddProject,
 		layout: "/admin",
 	},
 	{
