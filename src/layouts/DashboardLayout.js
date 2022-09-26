@@ -137,13 +137,11 @@ const DashboardLayout = () => {
 export default DashboardLayout;
 
 const Background = styled("div")(() => ({
-	width: "95%",
-	height: "90vh",
+	width: "100%",
+	height: "100vh",
 	display: "flex",
-	margin: "30px 0",
 	background:
 		"linear-gradient(to right bottom, rgba(65, 185, 214,0.5),rgba(65, 185, 214,0.2), rgba(65, 185, 214,0.4))",
-	borderRadius: "30px",
 	backdropFilter: "blur(10px)",
 	boxShadow: "10px 10px 15px 0 rgba(0,0,0,0.2)",
 }));

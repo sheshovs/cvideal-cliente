@@ -1,5 +1,15 @@
 import React from "react";
-import { styled, Box } from "@mui/material";
+import {
+	styled,
+	Box,
+	TableContainer,
+	Table,
+	TableHead,
+	TableRow,
+	TableCell,
+	TableBody,
+	Paper,
+} from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjectsByUserID } from "../../../redux/actionsRedux/project";
@@ -16,22 +26,47 @@ const Projects = () => {
 
 	return (
 		<ComponentBox>
-			{userProjects?.map((project) => {
-				return (
-					<ItemLink to={`/admin/projects`}>
-						<ProjectAddItem>
-							<ProjectAddItemTitle>{project.name}</ProjectAddItemTitle>
-						</ProjectAddItem>
-					</ItemLink>
-				);
-			})}
-
-			<ItemLink to={location.pathname + "/add"}>
-				<ProjectAddItem>
-					<AddIcon sx={{ color: "rgb(58, 163, 189)", fontSize: "40px" }} />
-					<ProjectAddItemTitle>Agregar Proyecto</ProjectAddItemTitle>
-				</ProjectAddItem>
-			</ItemLink>
+			<TableContainer component={Paper}>
+				<Table sx={{ minWidth: 650 }}>
+					<TableHead style={{ background: "rgba(65,185,214,1)" }}>
+						<TableRow>
+							<TableCell>Nombre</TableCell>
+							<TableCell>Descripción</TableCell>
+							<TableCell>Tipo</TableCell>
+							<TableCell>Fecha</TableCell>
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{userProjects.map((project) => (
+							<TableRow
+								key={project.name}
+								sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+							>
+								<TableCell component="th" scope="row">
+									{project.name}
+								</TableCell>
+								<TableCell>{project.description}</TableCell>
+								<TableCell>{project.type}</TableCell>
+								<TableCell>
+									{project.project_date
+										.slice(0, 10)
+										.split("-")
+										.reverse()
+										.join("/")}
+								</TableCell>
+							</TableRow>
+						))}
+						<TableRow>
+							<ItemLink to={location.pathname + "/add"}>
+								<TableCell>
+									<AddIcon sx={{ fontSize: "16px" }} />
+									Agregar Proyecto
+								</TableCell>
+							</ItemLink>
+						</TableRow>
+					</TableBody>
+				</Table>
+			</TableContainer>
 		</ComponentBox>
 	);
 };
@@ -61,7 +96,6 @@ const ProjectAddItem = styled(Box)(() => ({
 
 const ProjectAddItemTitle = styled("h2")(() => ({
 	textAlign: "center",
-	fontSize: "1.4rem",
 	color: "rgb(58, 163, 189)",
 	margin: 0,
 }));
